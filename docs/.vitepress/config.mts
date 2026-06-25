@@ -1,5 +1,5 @@
 import { defineConfig } from 'vitepress'
-import { generatedSidebar } from './sidebar.generated'
+import { generatedSidebar } from './sidebar.generated.js'
 
 export default defineConfig({
   title: '上古世纪 NA 攻略知识库',
