@@ -15,8 +15,9 @@
   --vp-c-divider: #263244;
 }
 
+/* 避免正文区域过宽挤到右侧“本页目录”。 */
 .VPDoc .content-container {
-  max-width: 980px !important;
+  max-width: 760px !important;
 }
 
 .vp-doc h2 {
@@ -30,22 +31,32 @@
 }
 
 .vp-doc img {
+  display: block;
+  max-width: 100%;
+  height: auto;
   border-radius: 12px;
   box-shadow: 0 10px 30px rgba(0,0,0,.18);
+  box-sizing: border-box;
 }
 
 .vp-doc .image-flow {
+  width: 100%;
+  max-width: 100%;
   margin: 18px 0 26px;
   padding: 12px;
   border: 1px solid var(--vp-c-divider);
   border-radius: 16px;
   background: var(--vp-c-bg-soft);
+  overflow: hidden;
+  box-sizing: border-box;
 }
 
 .vp-doc .image-flow img {
-  display: block;
-  max-width: 860px;
+  width: 100%;
+  max-width: 100%;
+  height: auto;
   margin: 0 auto;
+  object-fit: contain;
 }
 
 .vp-doc blockquote {
@@ -61,4 +72,20 @@
 
 .VPFeature {
   border-color: color-mix(in srgb, var(--vp-c-brand-2) 18%, var(--vp-c-divider));
+}
+
+@media (min-width: 1280px) {
+  .VPDoc.has-aside .content-container {
+    max-width: 720px !important;
+  }
+}
+
+@media (max-width: 959px) {
+  .VPDoc .content-container {
+    max-width: 100% !important;
+  }
+
+  .vp-doc .image-flow {
+    padding: 8px;
+  }
 }
