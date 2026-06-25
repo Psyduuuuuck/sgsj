@@ -1,0 +1,44 @@
+name: Publish VitePress build to repository root
+
+on:
+  push:
+    branches: ["main"]
+  workflow_dispatch:
+
+permissions:
+  contents: write
+
+jobs:
+  publish-root:
+    if: github.actor != 'github-actions[bot]'
+    runs-on: ubuntu-latest
+    steps:
+      - name: Checkout
+        uses: actions/checkout@v4
+        with:
+          fetch-depth: 0
+      - name: Setup Node
+        uses: actions/setup-node@v4
+        with:
+          node-version: 20
+      - name: Install dependencies
+        run: npm install
+      - name: Build VitePress
+        run: npm run build
+      - name: Copy VitePress output to repository root
+        run: |
+          cp -r docs/.vitepress/dist/. ./
+          [ -d assets ] && mkdir -p ./assets && cp -r assets/. ./assets/ || true
+          [ -d api ] && cp -r api ./api || true
+          [ -d rag ] && cp -r rag ./rag || true
+          [ -f llms.txt ] && cp llms.txt ./llms.txt || true
+          [ -f robots.txt ] && cp robots.txt ./robots.txt || true
+          [ -f sitemap.xml ] && cp sitemap.xml ./sitemap.xml || true
+          [ -f ArcheAge_NA_daily_guide_KB.md ] && cp ArcheAge_NA_daily_guide_KB.md ./ArcheAge_NA_daily_guide_KB.md || true
+      - name: Commit built site
+        run: |
+          git config user.name "github-actions[bot]"
+          git config user.email "41898282+github-actions[bot]@users.noreply.github.com"
+          git add -A
+          git commit -m "Publish VitePress build to root" || exit 0
+          git push
