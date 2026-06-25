@@ -1,0 +1,28 @@
+# 上古世纪 NA 日活图文攻略知识库
+
+> 来源：用户上传 PDF《上古世纪 胎教级日活图文攻略》，整理为 Markdown、静态知识库与 AI 检索分块。
+
+## 站点用途
+
+这是一个面向玩家查询和 AI 阅读的静态知识库，内容包括生活玩法、PVE、世界 BOSS、日常/周常、宗师装备、对抗活动等。
+
+## 关键文件
+
+- /ArcheAge_NA_daily_guide_KB.md：完整 Markdown 文档
+- /rag/chunks.jsonl：按章节切分的 AI/RAG 导入文件
+- /api/sections.json：前端使用的章节 JSON
+- /api/section_catalog.csv：章节目录索引
+- /api/image_manifest.csv：图片资源清单
+
+## 主要章节
+
+- 前言
+- 目录
+- 第一章 生活篇
+- 第二章 PVE篇
+- 第三章 宗师篇
+- 后记
+
+## 检索建议
+
+优先按玩法、收益、前置、风险和时间检索，例如：跑商、海商、发酵货、钓鱼、矿机、世界BOSS、daily、weekly、宗师装备、锁船、锁车、不推荐。
