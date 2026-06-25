@@ -35,7 +35,7 @@ function distributeGuideImages() {
       node = node.nextElementSibling
     }
 
-    const figures = sectionNodes.filter((item) => item.classList.contains('image-flow'))
+    const figures = sectionNodes.filter((item) => item.classList.contains('image-flow') && !item.hasAttribute('data-pdf-anchor'))
     if (!figures.length) return
 
     const textBlocks = sectionNodes.filter((item) => !item.classList.contains('image-flow') && isTextBlock(item))
