@@ -2,8 +2,8 @@ import { defineConfig } from 'vitepress'
 import { generatedSidebar } from './sidebar.generated.js'
 
 export default defineConfig({
-  title: '上古世纪 NA 攻略知识库',
-  description: '上古世纪 NA 日活图文攻略在线知识库',
+  title: '上古世纪攻略知识库',
+  description: '上古世纪日活攻略知识库',
   lang: 'zh-CN',
   base: '/sgsj/',
   cleanUrls: true,
@@ -21,7 +21,7 @@ export default defineConfig({
     ['link', { rel: 'apple-touch-icon', href: '/sgsj/favicon.svg' }]
   ],
   themeConfig: {
-    logo: { src: '/sgsj/favicon.svg', width: 24, height: 24 },
+    logo: { src: '/favicon.svg', width: 24, height: 24 },
     nav: [
       { text: '首页', link: '/' },
       { text: '生活篇', link: '/life/' },
@@ -57,7 +57,7 @@ export default defineConfig({
     ],
     footer: {
       message: '基于攻略整理，仅作玩家知识库检索使用。',
-      copyright: '上古世纪 NA 日活攻略知识库'
+      copyright: '上古世纪攻略知识库'
     }
   }
 })
