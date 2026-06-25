@@ -1,6 +1,6 @@
 {
   "scripts": {
-    "docs:prepare": "node scripts/prepare-vitepress.mjs",
+    "docs:prepare": "node scripts/prepare-vitepress.mjs && node scripts/apply-image-anchor-map.mjs",
     "dev": "npm run docs:prepare && vitepress dev docs --host 0.0.0.0",
     "build": "npm run docs:prepare && vitepress build docs",
     "preview": "vitepress preview docs --host 0.0.0.0"
