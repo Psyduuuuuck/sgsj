@@ -1,4 +1,4 @@
-name: Deploy static knowledge base to GitHub Pages
+name: Deploy VitePress to GitHub Pages
 
 on:
   push:
@@ -15,20 +15,42 @@ concurrency:
   cancel-in-progress: false
 
 jobs:
-  deploy:
-    environment:
-      name: github-pages
-      url: ${{ steps.deployment.outputs.page_url }}
+  build:
     runs-on: ubuntu-latest
     steps:
       - name: Checkout
         uses: actions/checkout@v4
+      - name: Setup Node
+        uses: actions/setup-node@v4
+        with:
+          node-version: 20
+          cache: npm
+      - name: Install dependencies
+        run: npm install
+      - name: Build VitePress
+        run: npm run build
+      - name: Copy knowledge-base assets
+        run: |
+          [ -d assets ] && cp -r assets docs/.vitepress/dist/assets || true
+          [ -d api ] && cp -r api docs/.vitepress/dist/api || true
+          [ -d rag ] && cp -r rag docs/.vitepress/dist/rag || true
+          [ -f llms.txt ] && cp llms.txt docs/.vitepress/dist/llms.txt || true
+          [ -f robots.txt ] && cp robots.txt docs/.vitepress/dist/robots.txt || true
+          [ -f sitemap.xml ] && cp sitemap.xml docs/.vitepress/dist/sitemap.xml || true
+          [ -f ArcheAge_NA_daily_guide_KB.md ] && cp ArcheAge_NA_daily_guide_KB.md docs/.vitepress/dist/ArcheAge_NA_daily_guide_KB.md || true
       - name: Setup Pages
         uses: actions/configure-pages@v5
       - name: Upload artifact
         uses: actions/upload-pages-artifact@v3
         with:
-          path: '.'
+          path: docs/.vitepress/dist
+  deploy:
+    environment:
+      name: github-pages
+      url: ${{ steps.deployment.outputs.page_url }}
+    needs: build
+    runs-on: ubuntu-latest
+    steps:
       - name: Deploy to GitHub Pages
         id: deployment
         uses: actions/deploy-pages@v4
