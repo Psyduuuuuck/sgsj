@@ -1,175 +1,27 @@
-<!doctype html>
-<html lang="zh-CN">
-<head>
-  <meta charset="utf-8" />
-  <meta name="viewport" content="width=device-width, initial-scale=1" />
-  <title>上古世纪 NA 日活攻略知识库</title>
-  <meta name="description" content="上古世纪 NA 日活图文攻略在线知识库，支持全文搜索、章节浏览、图片查看和 AI/RAG 数据导出。" />
-  <link rel="icon" href="data:image/svg+xml,%3Csvg xmlns='http://www.w3.org/2000/svg' viewBox='0 0 100 100'%3E%3Crect width='100' height='100' rx='20' fill='%23111827'/%3E%3Ctext x='50' y='62' font-size='50' text-anchor='middle' fill='%23facc15'%3E古%3C/text%3E%3C/svg%3E" />
-  <style>
-    :root{
-      --bg:#0b1020; --panel:#111827; --panel2:#172033; --text:#e5e7eb; --muted:#a5b4c4;
-      --line:#273244; --accent:#facc15; --accent2:#38bdf8; --danger:#fb7185; --card:#0f172a;
-      --shadow: 0 18px 50px rgba(0,0,0,.25); --radius:18px;
-    }
-    *{box-sizing:border-box}
-    body{margin:0;background:linear-gradient(135deg,#08111f,#101827 55%,#16101f);color:var(--text);font:16px/1.72 -apple-system,BlinkMacSystemFont,"Segoe UI","PingFang SC","Microsoft YaHei",Arial,sans-serif;}
-    a{color:var(--accent2);text-decoration:none} a:hover{text-decoration:underline}
-    .app{display:grid;grid-template-columns:330px 1fr;min-height:100vh}
-    aside{border-right:1px solid var(--line);background:rgba(15,23,42,.88);backdrop-filter:blur(16px);position:sticky;top:0;height:100vh;overflow:hidden;display:flex;flex-direction:column}
-    .brand{padding:22px 20px 14px;border-bottom:1px solid var(--line)}
-    .brand h1{font-size:19px;margin:0 0 6px;letter-spacing:.4px}.brand p{margin:0;color:var(--muted);font-size:13px}
-    .searchBox{padding:16px 16px 12px;border-bottom:1px solid var(--line)}
-    .searchBox input{width:100%;border:1px solid #344056;background:#0b1220;color:var(--text);border-radius:14px;padding:13px 14px;font-size:15px;outline:none}.searchBox input:focus{border-color:var(--accent2);box-shadow:0 0 0 3px rgba(56,189,248,.12)}
-    .quick{display:flex;gap:8px;flex-wrap:wrap;margin-top:10px}.quick button,.chip{border:1px solid #35435a;background:#111b2d;color:#cbd5e1;border-radius:999px;padding:5px 10px;font-size:12px;cursor:pointer}.quick button:hover,.chip:hover{border-color:var(--accent2);color:white}
-    .toc{overflow:auto;padding:12px 10px 24px;flex:1}.toc button{display:block;width:100%;text-align:left;color:#dbeafe;background:transparent;border:0;border-radius:10px;padding:7px 10px;cursor:pointer;white-space:nowrap;overflow:hidden;text-overflow:ellipsis}.toc button:hover{background:#162238}.toc button.active{background:#23314d;color:white;border-left:3px solid var(--accent)}
-    .toc .lvl1{font-weight:750;margin-top:6px}.toc .lvl2{padding-left:20px;color:#c6d3e4}.toc .lvl3{padding-left:34px;color:#b7c5d6}.toc .lvl4,.toc .lvl5{padding-left:48px;color:#aab8ca;font-size:13px}
-    main{min-width:0}.topbar{position:sticky;top:0;z-index:4;padding:13px 22px;border-bottom:1px solid var(--line);background:rgba(11,16,32,.82);backdrop-filter:blur(16px);display:flex;align-items:center;justify-content:space-between;gap:10px}.topbar .stats{color:var(--muted);font-size:13px}.topbar .actions{display:flex;gap:8px;flex-wrap:wrap}.btn{border:1px solid #3b4860;background:#121c2e;color:#e5e7eb;border-radius:12px;padding:8px 12px;cursor:pointer}.btn:hover{border-color:var(--accent2);background:#17243a;text-decoration:none}.btn.primary{background:#facc15;color:#111827;border-color:#facc15;font-weight:700}
-    .wrap{max-width:1180px;margin:0 auto;padding:24px}.hero{background:radial-gradient(circle at top left,rgba(250,204,21,.18),transparent 32%),radial-gradient(circle at top right,rgba(56,189,248,.14),transparent 30%),rgba(15,23,42,.72);border:1px solid var(--line);border-radius:var(--radius);box-shadow:var(--shadow);padding:28px;margin-bottom:18px}.hero h2{font-size:34px;line-height:1.25;margin:0 0 10px}.hero p{color:#cbd5e1;margin:0 0 14px}.grid{display:grid;grid-template-columns:repeat(4,minmax(0,1fr));gap:12px}.metric{background:#0b1220;border:1px solid #273244;border-radius:16px;padding:14px}.metric strong{font-size:24px;display:block}.metric span{color:var(--muted);font-size:13px}
-    .panel{background:rgba(15,23,42,.82);border:1px solid var(--line);border-radius:var(--radius);box-shadow:var(--shadow);padding:24px}.sectionTitle{display:flex;justify-content:space-between;align-items:start;gap:12px;margin-bottom:12px}.sectionTitle h2{font-size:30px;line-height:1.25;margin:0}.meta{color:var(--muted);font-size:13px;white-space:nowrap}.tags{display:flex;gap:8px;flex-wrap:wrap;margin:12px 0 18px}.tag{font-size:12px;color:#fef3c7;background:rgba(250,204,21,.1);border:1px solid rgba(250,204,21,.25);padding:4px 9px;border-radius:999px}.content{font-size:17px;color:#e6edf5}.content p{margin:0 0 12px}.content .empty{color:var(--muted)} mark{background:rgba(250,204,21,.28);color:#fff;border-radius:4px;padding:0 2px}.results{display:none;margin-bottom:18px}.resultItem{border:1px solid var(--line);border-radius:16px;background:#0d1627;padding:14px;margin-bottom:10px;cursor:pointer}.resultItem:hover{border-color:var(--accent2)}.resultItem h3{font-size:17px;margin:0 0 6px}.resultItem p{margin:0;color:#cbd5e1;font-size:14px}.resultMeta{color:var(--muted);font-size:12px;margin-top:6px}.imageGrid{display:grid;grid-template-columns:repeat(auto-fill,minmax(180px,1fr));gap:12px;margin-top:20px}.imageCard{border:1px solid var(--line);background:#0b1220;border-radius:14px;padding:8px}.imageCard img{width:100%;height:150px;object-fit:contain;border-radius:10px;background:#050913;cursor:zoom-in}.imageCard div{font-size:12px;color:var(--muted);margin-top:6px;word-break:break-all}.copyBox{display:none;margin-top:14px;background:#0b1220;border:1px solid #344056;border-radius:14px;padding:12px;color:#cbd5e1;font-size:13px;white-space:pre-wrap}.footer{color:var(--muted);font-size:13px;margin:22px 0;text-align:center}.mobileMenu{display:none}.modal{position:fixed;inset:0;background:rgba(0,0,0,.82);z-index:20;display:none;align-items:center;justify-content:center;padding:20px}.modal img{max-width:96vw;max-height:92vh;border-radius:12px;background:#050913}.modal button{position:absolute;top:16px;right:16px}
-    @media (max-width: 900px){.app{grid-template-columns:1fr}aside{position:fixed;left:-340px;z-index:10;width:320px;transition:.22s}.showNav aside{left:0}.mobileMenu{display:inline-block}.topbar{padding:12px}.wrap{padding:14px}.grid{grid-template-columns:repeat(2,1fr)}.hero h2{font-size:26px}.sectionTitle{display:block}.meta{white-space:normal;margin-top:6px}}
-    @media (max-width: 520px){.grid{grid-template-columns:1fr}.hero{padding:20px}.panel{padding:18px}.sectionTitle h2{font-size:24px}.content{font-size:16px}}
-  </style>
-</head>
-<body>
-<div class="app" id="app">
-  <aside>
-    <div class="brand">
-      <h1>上古世纪 NA 攻略知识库</h1>
-      <p>PDF → Markdown → 在线搜索 → AI/RAG 分块</p>
-    </div>
-    <div class="searchBox">
-      <input id="search" placeholder="搜索：跑商 / 钓鱼 / 宗师 / 世界BOSS..." autocomplete="off" />
-      <div class="quick" id="quick"></div>
-    </div>
-    <nav class="toc" id="toc"></nav>
-  </aside>
-  <main>
-    <div class="topbar">
-      <div><button class="btn mobileMenu" id="menuBtn">目录</button> <span class="stats" id="stats"></span></div>
-      <div class="actions">
-        <a class="btn" href="ArcheAge_NA_daily_guide_KB.md" target="_blank">Markdown</a>
-        <a class="btn" href="rag/chunks.jsonl" target="_blank">JSONL</a>
-        <a class="btn" href="llms.txt" target="_blank">llms.txt</a>
-      </div>
-    </div>
-    <div class="wrap">
-      <section class="hero" id="hero">
-        <h2>上古世纪 NA 日活图文攻略</h2>
-        <p>适合玩家快速查询，也适合作为 AI 知识库数据源。支持全文搜索、章节目录、图片查看、复制章节给 AI。</p>
-        <div class="grid">
-          <div class="metric"><strong id="mSections">0</strong><span>章节分块</span></div>
-          <div class="metric"><strong id="mImages">0</strong><span>图片资源</span></div>
-          <div class="metric"><strong>336</strong><span>PDF 原页数</span></div>
-          <div class="metric"><strong>9.5</strong><span>攻略更新版本</span></div>
-        </div>
-      </section>
-      <section class="results panel" id="results"></section>
-      <article class="panel" id="article"></article>
-      <div class="footer">静态站点，无后端、无数据库。内容来源于用户上传 PDF 整理版。</div>
-    </div>
-  </main>
-</div>
-<div class="modal" id="modal"><button class="btn primary" id="closeModal">关闭</button><img id="modalImg" alt="预览图" /></div>
-<script src="kb-data.js"></script>
-<script>
-(function(){
-  const sections = window.KB_SECTIONS || [];
-  const $ = (id)=>document.getElementById(id);
-  const toc=$('toc'), article=$('article'), search=$('search'), results=$('results'), stats=$('stats');
-  const quickWords=['跑商','钓鱼','采矿','世界BOSS','daily','weekly','宗师装备','不推荐','锁船','蓝颜商会'];
-  $('quick').innerHTML = quickWords.map(w=>`<button data-q="${w}">${w}</button>`).join('');
-  $('quick').addEventListener('click', e=>{ if(e.target.dataset.q){ search.value=e.target.dataset.q; doSearch(); }});
-  $('menuBtn').addEventListener('click', ()=>document.body.classList.toggle('showNav'));
-
-  const imageCount = sections.reduce((n,s)=>n+(s.images? s.images.length:0),0);
-  $('mSections').textContent = sections.length;
-  $('mImages').textContent = imageCount;
-  stats.textContent = `${sections.length} 个章节 · ${imageCount} 张图片`;
-
-  function esc(s){ return String(s||'').replace(/[&<>'"]/g, c=>({ '&':'&amp;','<':'&lt;','>':'&gt;',"'":'&#39;','"':'&quot;' }[c])); }
-  function norm(s){ return String(s||'').toLowerCase().replace(/\s+/g,''); }
-  function paraHtml(text, q){
-    const terms = q ? q.trim().split(/\s+/).filter(Boolean).slice(0,6) : [];
-    return String(text||'').split(/\n\s*\n/).map(p=>{
-      let safe=esc(p).replace(/\n/g,'<br>');
-      for(const t of terms){
-        const re = new RegExp(escReg(t), 'gi');
-        safe = safe.replace(re, m=>`<mark>${m}</mark>`);
-      }
-      return `<p>${safe}</p>`;
-    }).join('') || '<p class="empty">本节暂无正文。</p>';
-  }
-  function escReg(s){return String(s).replace(/[.*+?^${}()|[\]\\]/g,'\\$&')}
-  function meta(s){ return `PDF 页码：${s.page_start}${s.page_end && s.page_end!==s.page_start ? '–'+s.page_end : ''}`; }
-  function renderToc(){
-    toc.innerHTML = sections.map(s=>`<button title="${esc(s.title)}" class="lvl${Math.min(s.level,5)}" data-id="${s.id}">${esc(s.title)}</button>`).join('');
-    toc.addEventListener('click', e=>{ const id=e.target.dataset.id; if(id) openSection(id); });
-  }
-  function openSection(id, q=''){
-    const s = sections.find(x=>x.id===id) || sections[0]; if(!s) return;
-    location.hash = s.id;
-    document.querySelectorAll('.toc button').forEach(b=>b.classList.toggle('active', b.dataset.id===s.id));
-    const tags=(s.keywords||[]).map(k=>`<span class="tag">${esc(k)}</span>`).join('');
-    const imgs=(s.images||[]).map((src,i)=>`<div class="imageCard"><img loading="lazy" src="${esc(src)}" alt="${esc(s.title)} 图 ${i+1}" data-full="${esc(src)}"><div>${esc(src)}</div></div>`).join('');
-    article.innerHTML = `
-      <div class="sectionTitle"><h2>${esc(s.title)}</h2><div class="meta">${meta(s)}</div></div>
-      <div class="tags">${tags}</div>
-      <div class="actions" style="margin-bottom:16px">
-        <button class="btn" id="copySection">复制本章</button>
-        <button class="btn" id="copyAIPrompt">复制 AI 问答上下文</button>
-        <button class="btn" id="toggleRaw">显示/隐藏原文</button>
-      </div>
-      <div class="content">${paraHtml(s.content, q)}</div>
-      ${imgs ? `<h3 style="margin-top:26px">本节图片资源</h3><div class="imageGrid">${imgs}</div>` : ''}
-      <pre class="copyBox" id="rawBox">${esc(JSON.stringify(s,null,2))}</pre>`;
-    $('copySection').onclick=()=>copyText(`# ${s.title}\n\n${s.content}`);
-    $('copyAIPrompt').onclick=()=>copyText(`请仅根据以下《上古世纪 NA 攻略知识库》章节内容回答问题。\n\n章节：${s.title}\nPDF页码：${s.page_start}-${s.page_end}\n关键词：${(s.keywords||[]).join('、')}\n\n正文：\n${s.content}`);
-    $('toggleRaw').onclick=()=>{ const r=$('rawBox'); r.style.display=r.style.display==='block'?'none':'block'; };
-    article.querySelectorAll('.imageCard img').forEach(img=>img.onclick=()=>showImg(img.dataset.full));
-    document.body.classList.remove('showNav');
-  }
-  function copyText(t){ navigator.clipboard && navigator.clipboard.writeText(t); }
-  function score(s, q){
-    const nq=norm(q); if(!nq) return 0;
-    const hay=norm(s.search_text); let sc=0;
-    if(norm(s.title).includes(nq)) sc+=120;
-    if((s.keywords||[]).some(k=>norm(k).includes(nq)||nq.includes(norm(k)))) sc+=80;
-    if(hay.includes(nq)) sc+=60;
-    const parts=q.toLowerCase().split(/\s+/).filter(Boolean);
-    for(const p of parts){ const np=norm(p); if(!np) continue; if(hay.includes(np)) sc+=20; }
-    // For CJK short queries, score individual chars lightly
-    if(nq.length>=2 && nq.length<=8){ for(const ch of nq){ if(hay.includes(ch)) sc+=1; } }
-    return sc;
-  }
-  function snippet(s,q){
-    const text = (s.summary || s.content || '').replace(/\s+/g,' ');
-    const nq = q.trim();
-    if(!nq) return text.slice(0,180);
-    const idx = text.toLowerCase().indexOf(nq.toLowerCase());
-    const start = Math.max(0, idx<0 ? 0 : idx-55);
-    let sn = (start>0?'…':'') + text.slice(start,start+190) + (start+190<text.length?'…':'');
-    return esc(sn).replace(new RegExp(escReg(nq),'gi'), m=>`<mark>${m}</mark>`);
-  }
-  function doSearch(){
-    const q=search.value.trim();
-    if(!q){ results.style.display='none'; results.innerHTML=''; openSection((location.hash||'#s001').slice(1)); return; }
-    const found = sections.map(s=>({s,score:score(s,q)})).filter(x=>x.score>0).sort((a,b)=>b.score-a.score).slice(0,30);
-    results.style.display='block';
-    results.innerHTML = `<h2 style="margin-top:0">搜索结果：${esc(q)} <span style="color:var(--muted);font-size:14px">${found.length} 条</span></h2>` + (found.length ? found.map(({s,score})=>`
-      <div class="resultItem" data-id="${s.id}"><h3>${esc(s.title)}</h3><p>${snippet(s,q)}</p><div class="resultMeta">${meta(s)} · 匹配度 ${score}</div></div>`).join('') : '<p class="empty">没有找到结果，建议换关键词，例如“黑炭”“发酵货”“宗师披风”。</p>');
-    results.querySelectorAll('.resultItem').forEach(el=>el.onclick=()=>openSection(el.dataset.id, q));
-    if(found[0]) openSection(found[0].s.id, q);
-  }
-  function showImg(src){ $('modalImg').src=src; $('modal').style.display='flex'; }
-  $('closeModal').onclick=()=>$('modal').style.display='none';
-  $('modal').onclick=(e)=>{ if(e.target.id==='modal') $('modal').style.display='none'; };
-  search.addEventListener('input', debounce(doSearch, 120));
-  function debounce(fn,ms){let t;return (...a)=>{clearTimeout(t);t=setTimeout(()=>fn(...a),ms)}}
-  renderToc();
-  openSection((location.hash||'#s001').slice(1));
-  window.addEventListener('hashchange',()=>openSection((location.hash||'#s001').slice(1)));
-})();
-</script>
-</body>
+<!DOCTYPE html>
+<html lang="zh-CN" dir="ltr">
+  <head>
+    <meta charset="utf-8">
+    <meta name="viewport" content="width=device-width,initial-scale=1">
+    <title>上古世纪 NA 日活攻略知识库 | 上古世纪 NA 攻略知识库</title>
+    <meta name="description" content="上古世纪 NA 日活图文攻略在线知识库">
+    <meta name="generator" content="VitePress v1.6.4">
+    <link rel="preload stylesheet" href="/sgsj/assets/style.B4cIU5xT.css" as="style">
+    <link rel="preload stylesheet" href="/sgsj/vp-icons.css" as="style">
+    
+    <script type="module" src="/sgsj/assets/app.BpQu7jFV.js"></script>
+    <link rel="preload" href="/sgsj/assets/inter-roman-latin.Di8DUHzh.woff2" as="font" type="font/woff2" crossorigin="">
+    <link rel="modulepreload" href="/sgsj/assets/chunks/theme.6Do0seew.js">
+    <link rel="modulepreload" href="/sgsj/assets/chunks/framework.M-AdQQii.js">
+    <link rel="modulepreload" href="/sgsj/assets/index.md.PXgcZzn8.lean.js">
+    <meta name="theme-color" content="#0f172a">
+    <link rel="icon" href="data:image/svg+xml,%3Csvg xmlns=%22http://www.w3.org/2000/svg%22 viewBox=%220 0 100 100%22%3E%3Crect width=%22100%22 height=%22100%22 rx=%2220%22 fill=%22%230f172a%22/%3E%3Ctext x=%2250%22 y=%2264%22 font-size=%2254%22 text-anchor=%22middle%22 fill=%22%23facc15%22%3E古%3C/text%3E%3C/svg%3E">
+    <script id="check-dark-mode">(()=>{const e=localStorage.getItem("vitepress-theme-appearance")||"auto",a=window.matchMedia("(prefers-color-scheme: dark)").matches;(!e||e==="auto"?a:e==="dark")&&document.documentElement.classList.add("dark")})();</script>
+    <script id="check-mac-os">document.documentElement.classList.toggle("mac",/Mac|iPhone|iPod|iPad/i.test(navigator.platform));</script>
+  </head>
+  <body>
+    <div id="app"><div class="Layout" data-v-5d98c3a5><!--[--><!--]--><!--[--><span tabindex="-1" data-v-0b0ada53></span><a href="#VPContent" class="VPSkipLink visually-hidden" data-v-0b0ada53>Skip to content</a><!--]--><!----><header class="VPNav" data-v-5d98c3a5 data-v-ae24b3ad><div class="VPNavBar" data-v-ae24b3ad data-v-6aa21345><div class="wrapper" data-v-6aa21345><div class="container" data-v-6aa21345><div class="title" data-v-6aa21345><div class="VPNavBarTitle" data-v-6aa21345 data-v-1168a8e4><a class="title" href="/sgsj/" data-v-1168a8e4><!--[--><!--]--><!--[--><img class="VPImage logo" src="data:image/svg+xml,%3Csvg xmlns=%22http://www.w3.org/2000/svg%22 viewBox=%220 0 100 100%22%3E%3Crect width=%22100%22 height=%22100%22 rx=%2220%22 fill=%22%230f172a%22/%3E%3Ctext x=%2250%22 y=%2264%22 font-size=%2254%22 text-anchor=%22middle%22 fill=%22%23facc15%22%3E古%3C/text%3E%3C/svg%3E" width="24" height="24" alt data-v-8426fc1a><!--]--><span data-v-1168a8e4>上古世纪 NA 攻略知识库</span><!--[--><!--]--></a></div></div><div class="content" data-v-6aa21345><div class="content-body" data-v-6aa21345><!--[--><!--]--><div class="VPNavBarSearch search" data-v-6aa21345><!--[--><!----><div id="local-search"><button type="button" class="DocSearch DocSearch-Button" aria-label="搜索攻略"><span class="DocSearch-Button-Container"><span class="vp-icon DocSearch-Search-Icon"></span><span class="DocSearch-Button-Placeholder">搜索攻略</span></span><span class="DocSearch-Button-Keys"><kbd class="DocSearch-Button-Key"></kbd><kbd class="DocSearch-Button-Key">K</kbd></span></button></div><!--]--></div><nav aria-labelledby="main-nav-aria-label" class="VPNavBarMenu menu" data-v-6aa21345 data-v-dc692963><span id="main-nav-aria-label" class="visually-hidden" data-v-dc692963> Main Navigation </span><!--[--><!--[--><a class="VPLink link VPNavBarMenuLink active" href="/sgsj/" tabindex="0" data-v-dc692963 data-v-e56f3d57><!--[--><span data-v-e56f3d57>首页</span><!--]--></a><!--]--><!--[--><a class="VPLink link VPNavBarMenuLink" href="/sgsj/life" tabindex="0" data-v-dc692963 data-v-e56f3d57><!--[--><span data-v-e56f3d57>生活篇</span><!--]--></a><!--]--><!--[--><a class="VPLink link VPNavBarMenuLink" href="/sgsj/pve" tabindex="0" data-v-dc692963 data-v-e56f3d57><!--[--><span data-v-e56f3d57>PVE</span><!--]--></a><!--]--><!--[--><a class="VPLink link VPNavBarMenuLink" href="/sgsj/grandmaster" tabindex="0" data-v-dc692963 data-v-e56f3d57><!--[--><span data-v-e56f3d57>宗师</span><!--]--></a><!--]--><!--[--><a class="VPLink link VPNavBarMenuLink" href="/sgsj/war" tabindex="0" data-v-dc692963 data-v-e56f3d57><!--[--><span data-v-e56f3d57>抗战</span><!--]--></a><!--]--><!--]--></nav><!----><div class="VPNavBarAppearance appearance" data-v-6aa21345 data-v-6c893767><button class="VPSwitch VPSwitchAppearance" type="button" role="switch" title aria-checked="false" data-v-6c893767 data-v-5337faa4 data-v-1d5665e3><span class="check" data-v-1d5665e3><span class="icon" data-v-1d5665e3><!--[--><span class="vpi-sun sun" data-v-5337faa4></span><span class="vpi-moon moon" data-v-5337faa4></span><!--]--></span></span></button></div><div class="VPSocialLinks VPNavBarSocialLinks social-links" data-v-6aa21345 data-v-0394ad82 data-v-7bc22406><!--[--><a class="VPSocialLink no-icon" href="https://github.com/Psyduuuuuck/sgsj" aria-label="github" target="_blank" rel="noopener" data-v-7bc22406 data-v-bd121fe5><span class="vpi-social-github"></span></a><!--]--></div><div class="VPFlyout VPNavBarExtra extra" data-v-6aa21345 data-v-bb2aa2f0 data-v-cf11d7a2><button type="button" class="button" aria-haspopup="true" aria-expanded="false" aria-label="extra navigation" data-v-cf11d7a2><span class="vpi-more-horizontal icon" data-v-cf11d7a2></span></button><div class="menu" data-v-cf11d7a2><div class="VPMenu" data-v-cf11d7a2 data-v-b98bc113><!----><!--[--><!--[--><!----><div class="group" data-v-bb2aa2f0><div class="item appearance" data-v-bb2aa2f0><p class="label" data-v-bb2aa2f0>Appearance</p><div class="appearance-action" data-v-bb2aa2f0><button class="VPSwitch VPSwitchAppearance" type="button" role="switch" title aria-checked="false" data-v-bb2aa2f0 data-v-5337faa4 data-v-1d5665e3><span class="check" data-v-1d5665e3><span class="icon" data-v-1d5665e3><!--[--><span class="vpi-sun sun" data-v-5337faa4></span><span class="vpi-moon moon" data-v-5337faa4></span><!--]--></span></span></button></div></div></div><div class="group" data-v-bb2aa2f0><div class="item social-links" data-v-bb2aa2f0><div class="VPSocialLinks social-links-list" data-v-bb2aa2f0 data-v-7bc22406><!--[--><a class="VPSocialLink no-icon" href="https://github.com/Psyduuuuuck/sgsj" aria-label="github" target="_blank" rel="noopener" data-v-7bc22406 data-v-bd121fe5><span class="vpi-social-github"></span></a><!--]--></div></div></div><!--]--><!--]--></div></div></div><!--[--><!--]--><button type="button" class="VPNavBarHamburger hamburger" aria-label="mobile navigation" aria-expanded="false" aria-controls="VPNavScreen" data-v-6aa21345 data-v-e5dd9c1c><span class="container" data-v-e5dd9c1c><span class="top" data-v-e5dd9c1c></span><span class="middle" data-v-e5dd9c1c></span><span class="bottom" data-v-e5dd9c1c></span></span></button></div></div></div></div><div class="divider" data-v-6aa21345><div class="divider-line" data-v-6aa21345></div></div></div><!----></header><!----><!----><div class="VPContent is-home" id="VPContent" data-v-5d98c3a5 data-v-1428d186><div class="VPHome" data-v-1428d186 data-v-8b561e3d><!--[--><!--]--><div class="VPHero VPHomeHero" data-v-8b561e3d data-v-4f9c455b><div class="container" data-v-4f9c455b><div class="main" data-v-4f9c455b><!--[--><!--]--><!--[--><h1 class="heading" data-v-4f9c455b><span class="name clip" data-v-4f9c455b>上古世纪 NA 日活攻略知识库</span><span class="text" data-v-4f9c455b>胎教级日活图文攻略 · VitePress 版</span></h1><p class="tagline" data-v-4f9c455b>面向玩家查询、攻略检索和 AI/RAG 阅读的在线知识库。</p><!--]--><!--[--><!--]--><div class="actions" data-v-4f9c455b><!--[--><div class="action" data-v-4f9c455b><a class="VPButton medium brand" href="/sgsj/guide/overview" data-v-4f9c455b data-v-fa7799d5>开始阅读</a></div><div class="action" data-v-4f9c455b><a class="VPButton medium alt" href="/sgsj/life#12-%E8%B7%91%E5%95%86" data-v-4f9c455b data-v-fa7799d5>跑商攻略</a></div><div class="action" data-v-4f9c455b><a class="VPButton medium alt" href="/sgsj/pve" data-v-4f9c455b data-v-fa7799d5>PVE 日常</a></div><!--]--></div><!--[--><!--]--></div><!----></div></div><!--[--><!--]--><!--[--><!--]--><div class="VPFeatures VPHomeFeatures" data-v-8b561e3d data-v-a6181336><div class="container" data-v-a6181336><div class="items" data-v-a6181336><!--[--><div class="grid-3 item" data-v-a6181336><div class="VPLink no-icon VPFeature" data-v-a6181336 data-v-a3976bdc><!--[--><article class="box" data-v-a3976bdc><div class="icon" data-v-a3976bdc>🔎</div><h2 class="title" data-v-a3976bdc>本地全文搜索</h2><p class="details" data-v-a3976bdc>使用 VitePress 默认主题搜索，适合快速查询跑商、钓鱼、世界BOSS、宗师装备等关键词。</p><!----></article><!--]--></div></div><div class="grid-3 item" data-v-a6181336><div class="VPLink no-icon VPFeature" data-v-a6181336 data-v-a3976bdc><!--[--><article class="box" data-v-a3976bdc><div class="icon" data-v-a3976bdc>📚</div><h2 class="title" data-v-a3976bdc>多章节文档结构</h2><p class="details" data-v-a3976bdc>将 PDF 知识库拆成生活、PVE、宗师、抗战等页面，阅读体验比单页更清晰。</p><!----></article><!--]--></div></div><div class="grid-3 item" data-v-a6181336><div class="VPLink no-icon VPFeature" data-v-a6181336 data-v-a3976bdc><!--[--><article class="box" data-v-a3976bdc><div class="icon" data-v-a3976bdc>🤖</div><h2 class="title" data-v-a3976bdc>AI/RAG 友好</h2><p class="details" data-v-a3976bdc>保留 Markdown、章节索引、JSONL 分块和 llms.txt，便于继续接入 Dify、RAGFlow 或自建问答。</p><!----></article><!--]--></div></div><!--]--></div></div></div><!--[--><!--]--><div class="vp-doc container" style="" data-v-8b561e3d data-v-8e2d4988><!--[--><div style="position:relative;" data-v-8b561e3d><div><h2 id="快速入口" tabindex="-1">快速入口 <a class="header-anchor" href="#快速入口" aria-label="Permalink to &quot;快速入口&quot;">​</a></h2><ul><li><a href="/sgsj/guide/overview">知识库使用说明</a></li><li><a href="/sgsj/guide/preface">前言</a></li><li><a href="/sgsj/life">生活篇：种地 / 跑商 / 钓鱼 / 采矿</a></li><li><a href="/sgsj/pve">PVE 篇：副本 / 世界 BOSS / 日常 / 周常</a></li><li><a href="/sgsj/grandmaster">宗师篇：装备制作 / 喂养 / 特化</a></li><li><a href="/sgsj/war">抗战篇：势力对抗 / 职业选择 / 举报</a></li></ul><h2 id="使用建议" tabindex="-1">使用建议 <a class="header-anchor" href="#使用建议" aria-label="Permalink to &quot;使用建议&quot;">​</a></h2><p>右上角搜索框可以直接输入：<code>跑商</code>、<code>钓鱼</code>、<code>黑炭</code>、<code>龙骨</code>、<code>世界BOSS</code>、<code>宗师防具</code>、<code>不推荐</code>、<code>锁船</code> 等关键词。</p></div></div><!--]--></div></div></div><footer class="VPFooter" data-v-5d98c3a5 data-v-e315a0ad><div class="container" data-v-e315a0ad><p class="message" data-v-e315a0ad>基于 PDF 攻略整理，仅作玩家知识库检索使用。</p><p class="copyright" data-v-e315a0ad>上古世纪 NA 日活攻略知识库</p></div></footer><!--[--><!--]--></div></div>
+    <script>window.__VP_HASH_MAP__=JSON.parse("{\"afterword.md\":\"C_tNOite\",\"full.md\":\"CVORqrIY\",\"grandmaster.md\":\"BtHvWQUo\",\"guide_catalog.md\":\"BAAoSZgG\",\"guide_overview.md\":\"CkuX0DSj\",\"guide_preface.md\":\"CLb0fPxn\",\"index.md\":\"PXgcZzn8\",\"life.md\":\"BNAA2yJr\",\"pve.md\":\"DSNETuEW\",\"war.md\":\"n6yO70rs\"}");window.__VP_SITE_DATA__=JSON.parse("{\"lang\":\"zh-CN\",\"dir\":\"ltr\",\"title\":\"上古世纪 NA 攻略知识库\",\"description\":\"上古世纪 NA 日活图文攻略在线知识库\",\"base\":\"/sgsj/\",\"head\":[],\"router\":{\"prefetchLinks\":true},\"appearance\":true,\"themeConfig\":{\"logo\":{\"src\":\"data:image/svg+xml,%3Csvg xmlns=%22http://www.w3.org/2000/svg%22 viewBox=%220 0 100 100%22%3E%3Crect width=%22100%22 height=%22100%22 rx=%2220%22 fill=%22%230f172a%22/%3E%3Ctext x=%2250%22 y=%2264%22 font-size=%2254%22 text-anchor=%22middle%22 fill=%22%23facc15%22%3E古%3C/text%3E%3C/svg%3E\",\"width\":24,\"height\":24},\"nav\":[{\"text\":\"首页\",\"link\":\"/\"},{\"text\":\"生活篇\",\"link\":\"/life\"},{\"text\":\"PVE\",\"link\":\"/pve\"},{\"text\":\"宗师\",\"link\":\"/grandmaster\"},{\"text\":\"抗战\",\"link\":\"/war\"}],\"sidebar\":[{\"text\":\"开始\",\"collapsed\":false,\"items\":[{\"text\":\"知识库使用说明\",\"link\":\"/guide/overview\"},{\"text\":\"前言\",\"link\":\"/guide/preface\"},{\"text\":\"原始目录\",\"link\":\"/guide/catalog\"}]},{\"text\":\"攻略正文\",\"collapsed\":false,\"items\":[{\"text\":\"第一章 生活篇\",\"link\":\"/life\"},{\"text\":\"第二章 PVE 篇\",\"link\":\"/pve\"},{\"text\":\"第三章 宗师篇\",\"link\":\"/grandmaster\"},{\"text\":\"第四章 抗战篇\",\"link\":\"/war\"},{\"text\":\"后记\",\"link\":\"/afterword\"}]},{\"text\":\"AI / 原文\",\"collapsed\":true,\"items\":[{\"text\":\"完整 Markdown 原文\",\"link\":\"/full\"}]}],\"search\":{\"provider\":\"local\",\"options\":{\"translations\":{\"button\":{\"buttonText\":\"搜索攻略\",\"buttonAriaLabel\":\"搜索攻略\"},\"modal\":{\"displayDetails\":\"显示详情\",\"resetButtonTitle\":\"清空搜索\",\"backButtonTitle\":\"关闭搜索\",\"noResultsText\":\"没有找到结果\",\"footer\":{\"selectText\":\"选择\",\"navigateText\":\"切换\",\"closeText\":\"关闭\"}}}}},\"outline\":{\"level\":\"deep\",\"label\":\"本页目录\"},\"docFooter\":{\"prev\":\"上一页\",\"next\":\"下一页\"},\"lastUpdated\":{\"text\":\"最后更新\",\"formatOptions\":{\"dateStyle\":\"short\",\"timeStyle\":\"medium\"}},\"editLink\":{\"pattern\":\"https://github.com/Psyduuuuuck/sgsj/edit/main/docs/:path\",\"text\":\"在 GitHub 编辑本页\"},\"socialLinks\":[{\"icon\":\"github\",\"link\":\"https://github.com/Psyduuuuuck/sgsj\"}],\"footer\":{\"message\":\"基于 PDF 攻略整理，仅作玩家知识库检索使用。\",\"copyright\":\"上古世纪 NA 日活攻略知识库\"}},\"locales\":{},\"scrollOffset\":134,\"cleanUrls\":true}");</script>
+    
+  </body>
 </html>
