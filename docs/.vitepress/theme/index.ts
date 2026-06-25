@@ -57,9 +57,9 @@ function distributeGuideImages() {
 }
 
 function scheduleImageDistribution() {
-  if (typeof window === 'undefined') return
+  if (typeof window === 'undefined' || typeof document === 'undefined') return
   nextTick(() => {
-    window.requestAnimationFrame(() => distributeGuideImages())
+    window.setTimeout(distributeGuideImages, 0)
     window.setTimeout(distributeGuideImages, 350)
   })
 }
