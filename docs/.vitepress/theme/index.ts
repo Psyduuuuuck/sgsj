@@ -3,6 +3,16 @@ import { h, nextTick, watch } from 'vue'
 import { useRoute } from 'vitepress'
 import './custom.css'
 
+function isTextBlock(element: Element) {
+  return ['P', 'UL', 'OL', 'TABLE', 'BLOCKQUOTE'].includes(element.tagName) &&
+    (element.textContent || '').trim().length > 8
+}
+
+function isImageCue(element: Element) {
+  const text = (element.textContent || '').trim()
+  return /(如图|如下图|图示|下图|上图|界面|按钮|位置|点位|路线|地图|标记|框|箭头|所示|示意)/.test(text)
+}
+
 function distributeGuideImages() {
   if (typeof document === 'undefined') return
 
@@ -25,30 +35,22 @@ function distributeGuideImages() {
       node = node.nextElementSibling
     }
 
-    const figures = sectionNodes.filter((item) => {
-      return item.classList.contains('image-flow') && item.getAttribute('data-auto-placed') !== '1'
-    })
-
+    const figures = sectionNodes.filter((item) => item.classList.contains('image-flow'))
     if (!figures.length) return
 
-    const candidates = sectionNodes.filter((item) => {
-      if (item.classList.contains('image-flow')) return false
-      if (item.closest('figure')) return false
-      if (!['P', 'UL', 'OL', 'TABLE', 'BLOCKQUOTE'].includes(item.tagName)) return false
-      return (item.textContent || '').trim().length > 8
-    })
+    const textBlocks = sectionNodes.filter((item) => !item.classList.contains('image-flow') && isTextBlock(item))
+    if (!textBlocks.length) return
 
-    if (!candidates.length) return
+    const cueBlocks = textBlocks.filter(isImageCue)
+    const targets = cueBlocks.length ? cueBlocks : textBlocks
 
     figures.forEach((figure) => figure.remove())
 
     figures.forEach((figure, index) => {
-      const targetIndex = Math.min(
-        candidates.length - 1,
-        Math.floor(((index + 0.55) * candidates.length) / figures.length)
-      )
-      const target = candidates[targetIndex]
+      const targetIndex = Math.min(targets.length - 1, Math.floor((index * targets.length) / figures.length))
+      const target = targets[targetIndex]
       figure.setAttribute('data-auto-placed', '1')
+      figure.setAttribute('data-placement', cueBlocks.length ? 'text-cue' : 'text-flow')
       target.insertAdjacentElement('afterend', figure)
     })
   })
