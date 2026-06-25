@@ -56,6 +56,14 @@ function distributeGuideImages() {
   })
 }
 
+function scheduleImageDistribution() {
+  if (typeof window === 'undefined') return
+  nextTick(() => {
+    window.requestAnimationFrame(() => distributeGuideImages())
+    window.setTimeout(distributeGuideImages, 350)
+  })
+}
+
 const ImageFlowEnhancer = {
   name: 'ImageFlowEnhancer',
   setup() {
@@ -63,12 +71,7 @@ const ImageFlowEnhancer = {
 
     watch(
       () => route.path,
-      () => {
-        nextTick(() => {
-          requestAnimationFrame(distributeGuideImages)
-          window.setTimeout(distributeGuideImages, 350)
-        })
-      },
+      () => scheduleImageDistribution(),
       { immediate: true }
     )
 
