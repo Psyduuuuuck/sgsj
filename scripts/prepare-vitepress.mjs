@@ -196,6 +196,7 @@ const overview = overviewStart >= 0 && textStart > overviewStart
   ? body.slice(overviewStart, textStart).trim() + '\n'
   : sectionContent(sectionByTitle('0. 知识库使用说明'))
 
+// 这些页面仍然生成，但不进入左侧菜单，避免干扰攻略阅读。
 writeDoc('guide/overview.md', frontmatter('知识库使用说明', '检索方式、Topic Map、高频关键词索引') + shiftHeadings(overview, 2))
 writeDoc('guide/preface.md', frontmatter('前言', '原攻略前言与版本说明') + shiftHeadings(sectionContent(sectionByTitle('前言')), 2))
 writeDoc('guide/catalog.md', frontmatter('原始目录', '攻略原始目录') + shiftHeadings(sectionContent(sectionByTitle('目录')), 2))
@@ -207,17 +208,8 @@ const groups = [
   { key: 'war', title: '第四章 抗战篇', prefix: '4.', desc: '势力对抗、职业选择、对抗活动组织与举报。' }
 ]
 
-const sidebar = [
-  {
-    text: '开始',
-    collapsed: false,
-    items: [
-      { text: '知识库使用说明', link: '/guide/overview' },
-      { text: '前言', link: '/guide/preface' },
-      { text: '原始目录', link: '/guide/catalog' }
-    ]
-  }
-]
+// 左侧菜单只保留攻略正文，并把原来的章节层级整体上升一级。
+const sidebar = []
 
 for (const group of groups) {
   const children = sections.filter((section) => section.level === 3 && section.title.startsWith(group.prefix))
@@ -229,7 +221,7 @@ for (const group of groups) {
 
   writeDoc(`${group.key}/index.md`, frontmatter(group.title, group.desc) + `# ${group.title}\n\n${group.desc}\n\n## 本章目录\n\n${cards}\n`)
 
-  const groupItems = [{ text: '本章总览', link: `/${group.key}/` }]
+  const groupItems = []
   for (const section of children) {
     const slug = fileSlug(section.title)
     const content = shiftHeadings(contentRange(section, 3), section.level)
@@ -244,21 +236,13 @@ for (const group of groups) {
       : { text: section.title, link: `/${group.key}/${slug}` })
   }
 
-  sidebar.push({ text: group.title, collapsed: false, items: groupItems })
+  sidebar.push({ text: group.title, link: `/${group.key}/`, collapsed: false, items: groupItems })
 }
 
 const afterword = sectionByTitle('后记')
 writeDoc('afterword.md', frontmatter('后记', '原攻略后记') + shiftHeadings(sectionContent(afterword), afterword?.level || 2))
 writeDoc('full.md', frontmatter('完整 Markdown 原文', '完整知识库整理版') + body)
-
-sidebar.push({
-  text: 'AI / 原文',
-  collapsed: true,
-  items: [
-    { text: '后记', link: '/afterword' },
-    { text: '完整 Markdown 原文', link: '/full' }
-  ]
-})
+sidebar.push({ text: '后记', link: '/afterword' })
 
 fs.writeFileSync(
   path.join(vitepressDir, 'sidebar.generated.mts'),
@@ -266,4 +250,4 @@ fs.writeFileSync(
   'utf8'
 )
 
-console.log(`Prepared VitePress docs: ${groups.map((g) => g.key).join(', ')} with nested sidebar.`)
+console.log(`Prepared VitePress docs with promoted guide sidebar: ${groups.map((g) => g.key).join(', ')}.`)
