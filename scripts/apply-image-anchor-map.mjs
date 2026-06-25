@@ -76,8 +76,19 @@ function sameAnchor(line, anchor) {
   return b.includes(a) || a.includes(b)
 }
 
+function splitFrontmatter(markdown) {
+  if (!markdown.startsWith('---\n')) return { frontmatter: '', body: markdown }
+  const end = markdown.indexOf('\n---', 4)
+  if (end < 0) return { frontmatter: '', body: markdown }
+  const closeEnd = end + 4
+  const frontmatter = markdown.slice(0, closeEnd).trimEnd() + '\n\n'
+  const body = markdown.slice(closeEnd).replace(/^\r?\n/, '')
+  return { frontmatter, body }
+}
+
 function applyPlacements(markdown, placements) {
-  const text = removeImageFigures(markdown)
+  const { frontmatter, body } = splitFrontmatter(markdown)
+  const text = removeImageFigures(body)
   const lines = text.split(/\r?\n/)
   const remaining = placements.map((item) => ({ anchor: item[0] || '', file: item[1] || '', used: false }))
   const out = []
@@ -97,7 +108,7 @@ function applyPlacements(markdown, placements) {
     for (const item of missed) out.push(figureHtml(item.file, item.anchor), '')
   }
 
-  return out.join('\n').replace(/\n{4,}/g, '\n\n\n').trim() + '\n'
+  return frontmatter + out.join('\n').replace(/\n{4,}/g, '\n\n\n').trim() + '\n'
 }
 
 const placementMap = loadMap()
