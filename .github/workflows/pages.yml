@@ -30,7 +30,7 @@ jobs:
         run: npm run build
       - name: Copy knowledge-base assets
         run: |
-          [ -d assets ] && cp -r assets docs/.vitepress/dist/assets || true
+          [ -d assets ] && mkdir -p docs/.vitepress/dist/assets && cp -r assets/. docs/.vitepress/dist/assets/ || true
           [ -d api ] && cp -r api docs/.vitepress/dist/api || true
           [ -d rag ] && cp -r rag docs/.vitepress/dist/rag || true
           [ -f llms.txt ] && cp llms.txt docs/.vitepress/dist/llms.txt || true
