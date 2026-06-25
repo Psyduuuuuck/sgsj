@@ -6,6 +6,7 @@ const sourcePath = path.join(root, 'ArcheAge_NA_daily_guide_KB.md')
 const docsDir = path.join(root, 'docs')
 const guideDir = path.join(docsDir, 'guide')
 const vitepressDir = path.join(docsDir, '.vitepress')
+const siteBaseUrl = 'https://psyduuuuuck.github.io/sgsj'
 
 if (!fs.existsSync(sourcePath)) {
   throw new Error('Missing ArcheAge_NA_daily_guide_KB.md. Please keep the generated Markdown file in repository root.')
@@ -29,9 +30,18 @@ let body = raw.replace(/^---\n[\s\S]*?\n---\n\n/, '')
 
 function normalizeAssetPath(url) {
   const clean = url.trim().replace(/^\.\//, '')
-  if (clean.startsWith('/sgsj/assets/')) return clean
-  if (clean.startsWith('assets/')) return `/sgsj/${clean}`
+  if (clean.startsWith('http://') || clean.startsWith('https://')) return clean
+  if (clean.startsWith('/sgsj/assets/')) return `https://psyduuuuuck.github.io${clean}`
+  if (clean.startsWith('assets/')) return `${siteBaseUrl}/${clean}`
   return clean
+}
+
+function escapeAttr(value) {
+  return String(value || '')
+    .replace(/&/g, '&amp;')
+    .replace(/"/g, '&quot;')
+    .replace(/</g, '&lt;')
+    .replace(/>/g, '&gt;')
 }
 
 function cleanImageLabel(label) {
@@ -41,6 +51,12 @@ function cleanImageLabel(label) {
     .replace(/PDF\s*p\.\d+(?:\s*[–-]\s*p?\.\d+)?/gi, '')
     .replace(/\s+/g, ' ')
     .trim() || '图示'
+}
+
+function imageFigure(label, url) {
+  const src = normalizeAssetPath(url)
+  const alt = cleanImageLabel(label)
+  return `<figure class="image-flow"><img src="${escapeAttr(src)}" alt="${escapeAttr(alt)}" loading="lazy" /></figure>`
 }
 
 function cleanContent(markdown) {
@@ -67,13 +83,13 @@ function cleanContent(markdown) {
         if (!next) { j++; continue }
         const match = next.match(/^-\s*\[([^\]]+)\]\(([^)]+)\)/)
         if (!match) break
-        images.push({ label: cleanImageLabel(match[1]), url: normalizeAssetPath(match[2]) })
+        images.push({ label: match[1], url: match[2] })
         j++
       }
       if (images.length) {
         out.push('')
         for (const image of images) {
-          out.push(`<figure class="image-flow"><img src="${image.url}" alt="${image.label}" loading="lazy" /></figure>`, '')
+          out.push(imageFigure(image.label, image.url), '')
         }
       }
       i = j - 1
@@ -81,10 +97,12 @@ function cleanContent(markdown) {
     }
 
     line = line
-      .replace(/!\[([^\]]*)\]\(\.\/assets\//g, '![$1](/sgsj/assets/')
-      .replace(/!\[([^\]]*)\]\(assets\//g, '![$1](/sgsj/assets/')
-      .replace(/src=["']\.\/assets\//g, 'src="/sgsj/assets/')
-      .replace(/src=["']assets\//g, 'src="/sgsj/assets/')
+      .replace(/!\[([^\]]*)\]\((\.\/assets\/[^)]+|assets\/[^)]+|\/sgsj\/assets\/[^)]+)\)/g, (_all, label, url) => imageFigure(label, url))
+      .replace(/!\[([^\]]*)\]\(\.\/assets\//g, `![$1](${siteBaseUrl}/assets/`)
+      .replace(/!\[([^\]]*)\]\(assets\//g, `![$1](${siteBaseUrl}/assets/`)
+      .replace(/src=["']\.\/assets\//g, `src="${siteBaseUrl}/assets/`)
+      .replace(/src=["']assets\//g, `src="${siteBaseUrl}/assets/`)
+      .replace(/src=["']\/sgsj\/assets\//g, `src="${siteBaseUrl}/assets/`)
       .replace(/（PDF\s*p\.[^)]+）/gi, '')
       .replace(/（p\.\d+(?:\s*[–-]\s*p?\.\d+)?\s*起?）/gi, '')
       .replace(/\s+p\.\d+(?:\s*[–-]\s*p?\.\d+)?\s*$/gi, '')
