@@ -1,0 +1,12 @@
+{
+  "scripts": {
+    "docs:prepare": "node scripts/prepare-vitepress.mjs",
+    "dev": "npm run docs:prepare && vitepress dev docs --host 0.0.0.0",
+    "build": "npm run docs:prepare && vitepress build docs",
+    "preview": "vitepress preview docs --host 0.0.0.0"
+  },
+  "devDependencies": {
+    "vitepress": "latest",
+    "vue": "latest"
+  }
+}
