@@ -1,4 +1,5 @@
 import { defineConfig } from 'vitepress'
+import { generatedSidebar } from './sidebar.generated'
 
 export default defineConfig({
   title: '上古世纪 NA 攻略知识库',
@@ -21,40 +22,12 @@ export default defineConfig({
     logo: { src: 'data:image/svg+xml,%3Csvg xmlns=%22http://www.w3.org/2000/svg%22 viewBox=%220 0 100 100%22%3E%3Crect width=%22100%22 height=%22100%22 rx=%2220%22 fill=%22%230f172a%22/%3E%3Ctext x=%2250%22 y=%2264%22 font-size=%2254%22 text-anchor=%22middle%22 fill=%22%23facc15%22%3E古%3C/text%3E%3C/svg%3E', width: 24, height: 24 },
     nav: [
       { text: '首页', link: '/' },
-      { text: '生活篇', link: '/life' },
-      { text: 'PVE', link: '/pve' },
-      { text: '宗师', link: '/grandmaster' },
-      { text: '抗战', link: '/war' }
+      { text: '生活篇', link: '/life/' },
+      { text: 'PVE', link: '/pve/' },
+      { text: '宗师', link: '/grandmaster/' },
+      { text: '抗战', link: '/war/' }
     ],
-    sidebar: [
-      {
-        text: '开始',
-        collapsed: false,
-        items: [
-          { text: '知识库使用说明', link: '/guide/overview' },
-          { text: '前言', link: '/guide/preface' },
-          { text: '原始目录', link: '/guide/catalog' }
-        ]
-      },
-      {
-        text: '攻略正文',
-        collapsed: false,
-        items: [
-          { text: '第一章 生活篇', link: '/life' },
-          { text: '第二章 PVE 篇', link: '/pve' },
-          { text: '第三章 宗师篇', link: '/grandmaster' },
-          { text: '第四章 抗战篇', link: '/war' },
-          { text: '后记', link: '/afterword' }
-        ]
-      },
-      {
-        text: 'AI / 原文',
-        collapsed: true,
-        items: [
-          { text: '完整 Markdown 原文', link: '/full' }
-        ]
-      }
-    ],
+    sidebar: generatedSidebar,
     search: {
       provider: 'local',
       options: {
@@ -81,7 +54,7 @@ export default defineConfig({
       { icon: 'github', link: 'https://github.com/Psyduuuuuck/sgsj' }
     ],
     footer: {
-      message: '基于 PDF 攻略整理，仅作玩家知识库检索使用。',
+      message: '基于攻略整理，仅作玩家知识库检索使用。',
       copyright: '上古世纪 NA 日活攻略知识库'
     }
   }
