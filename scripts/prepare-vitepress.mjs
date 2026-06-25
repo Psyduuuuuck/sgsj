@@ -13,7 +13,16 @@ if (!fs.existsSync(sourcePath)) {
 fs.mkdirSync(guideDir, { recursive: true })
 
 const raw = fs.readFileSync(sourcePath, 'utf8')
-const body = raw.replace(/^---\n[\s\S]*?\n---\n\n/, '')
+let body = raw.replace(/^---\n[\s\S]*?\n---\n\n/, '')
+
+// GitHub Pages 站点部署在 /sgsj/ 子路径下。
+// 原 Markdown 图片路径是 assets/xxx.jpeg，VitePress 在多级页面中容易解析成相对目录。
+// 这里统一改成 /sgsj/assets/xxx.jpeg，保证线上所有页面都能访问同一份图片资源。
+body = body
+  .replace(/!\[([^\]]*)\]\(\.\/assets\//g, '![$1](/sgsj/assets/')
+  .replace(/!\[([^\]]*)\]\(assets\//g, '![$1](/sgsj/assets/')
+  .replace(/src=["']\.\/assets\//g, 'src="/sgsj/assets/')
+  .replace(/src=["']assets\//g, 'src="/sgsj/assets/')
 
 const headings = []
 const headingRegex = /^##\s+(.+?)\s*(?:<a[^>]+><\/a>)?\s*$/gm
