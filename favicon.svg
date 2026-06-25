@@ -1,0 +1,34 @@
+<svg xmlns="http://www.w3.org/2000/svg" viewBox="0 0 128 128">
+  <defs>
+    <radialGradient id="bg" cx="48%" cy="44%" r="62%">
+      <stop offset="0" stop-color="#173f2f"/>
+      <stop offset="0.54" stop-color="#0b2a1e"/>
+      <stop offset="1" stop-color="#06140f"/>
+    </radialGradient>
+    <linearGradient id="leaf" x1="16" y1="16" x2="108" y2="112">
+      <stop offset="0" stop-color="#98f02d"/>
+      <stop offset="0.45" stop-color="#2bbd67"/>
+      <stop offset="1" stop-color="#00d7ff"/>
+    </linearGradient>
+    <linearGradient id="neon" x1="24" y1="24" x2="104" y2="104">
+      <stop offset="0" stop-color="#eaffff"/>
+      <stop offset="0.5" stop-color="#70fff0"/>
+      <stop offset="1" stop-color="#2ae6ff"/>
+    </linearGradient>
+    <filter id="glow" x="-40%" y="-40%" width="180%" height="180%">
+      <feGaussianBlur stdDeviation="3.2" result="blur"/>
+      <feMerge>
+        <feMergeNode in="blur"/>
+        <feMergeNode in="SourceGraphic"/>
+      </feMerge>
+    </filter>
+  </defs>
+  <rect width="128" height="128" rx="26" fill="#07130f"/>
+  <circle cx="64" cy="64" r="52" fill="url(#bg)"/>
+  <path d="M22 69c20-43 58-48 84-24-31-3-48 8-64 33 19-6 39-4 58 8-35 18-61 13-78-17Z" fill="url(#leaf)" opacity=".72"/>
+  <path d="M18 81c10-14 21-20 34-19-9 8-12 18-10 31-9-2-17-6-24-12Zm89-45c-11 2-19 8-24 19 11-5 21-5 31 1-1-8-3-15-7-20Z" fill="#71ef43" opacity=".48"/>
+  <circle cx="64" cy="64" r="47" fill="none" stroke="url(#neon)" stroke-width="5" filter="url(#glow)"/>
+  <path d="M43 86 65 25l22 61-11-1-7-21-26 22Zm9-15c13-8 24-13 36-14-12 8-23 18-34 30l-11-1c3-6 6-11 9-15Z" fill="#efffff" filter="url(#glow)"/>
+  <path d="M17 32h16M95 18h13M100 105h16M12 96h18" stroke="#18f4ff" stroke-width="3" stroke-linecap="round" opacity=".58"/>
+  <path d="M25 23h4v12h-4zm74 70h4v13h-4zM112 48h4v16h-4z" fill="#18f4ff" opacity=".55"/>
+</svg>
