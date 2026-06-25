@@ -20,6 +20,19 @@ function loadMap() {
   return JSON.parse(json).g || {}
 }
 
+function loadSectionTitles() {
+  const file = path.join(apiDir, 'section_catalog.csv')
+  const map = new Map()
+  if (!fs.existsSync(file)) return map
+  const lines = fs.readFileSync(file, 'utf8').replace(/^\uFEFF/, '').split(/\r?\n/)
+  for (const line of lines.slice(1)) {
+    if (!line.trim()) continue
+    const parts = line.split(',')
+    if (parts.length >= 3) map.set(parts[0], parts[2])
+  }
+  return map
+}
+
 function sectionDoc(sectionTitle) {
   const match = String(sectionTitle || '').match(/^(\d+)\.(\d+)/)
   if (!match) return null
@@ -64,7 +77,7 @@ function sameAnchor(line, anchor) {
 }
 
 function applyPlacements(markdown, placements) {
-  let text = removeImageFigures(markdown)
+  const text = removeImageFigures(markdown)
   const lines = text.split(/\r?\n/)
   const remaining = placements.map((item) => ({ anchor: item[0] || '', file: item[1] || '', used: false }))
   const out = []
@@ -88,15 +101,15 @@ function applyPlacements(markdown, placements) {
 }
 
 const placementMap = loadMap()
+const sectionTitles = loadSectionTitles()
 const byDoc = new Map()
+
 for (const [sectionId, placements] of Object.entries(placementMap)) {
-  for (const item of placements) {
-    const sectionTitle = item[2] || sectionId
-    const file = sectionDoc(sectionTitle)
-    if (!file || !fs.existsSync(file)) continue
-    if (!byDoc.has(file)) byDoc.set(file, [])
-    byDoc.get(file).push(item)
-  }
+  const sectionTitle = sectionTitles.get(sectionId) || sectionId
+  const file = sectionDoc(sectionTitle)
+  if (!file || !fs.existsSync(file)) continue
+  if (!byDoc.has(file)) byDoc.set(file, [])
+  byDoc.get(file).push(...placements)
 }
 
 let changed = 0
