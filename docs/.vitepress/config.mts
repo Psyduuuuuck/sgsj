@@ -15,11 +15,13 @@ export default defineConfig({
     }
   },
   head: [
-    ['meta', { name: 'theme-color', content: '#0f172a' }],
-    ['link', { rel: 'icon', href: 'data:image/svg+xml,%3Csvg xmlns=%22http://www.w3.org/2000/svg%22 viewBox=%220 0 100 100%22%3E%3Crect width=%22100%22 height=%22100%22 rx=%2220%22 fill=%22%230f172a%22/%3E%3Ctext x=%2250%22 y=%2264%22 font-size=%2254%22 text-anchor=%22middle%22 fill=%22%23facc15%22%3E古%3C/text%3E%3C/svg%3E' }]
+    ['meta', { name: 'theme-color', content: '#07130f' }],
+    ['link', { rel: 'icon', type: 'image/svg+xml', href: '/sgsj/favicon.svg' }],
+    ['link', { rel: 'shortcut icon', href: '/sgsj/favicon.svg' }],
+    ['link', { rel: 'apple-touch-icon', href: '/sgsj/favicon.svg' }]
   ],
   themeConfig: {
-    logo: { src: 'data:image/svg+xml,%3Csvg xmlns=%22http://www.w3.org/2000/svg%22 viewBox=%220 0 100 100%22%3E%3Crect width=%22100%22 height=%22100%22 rx=%2220%22 fill=%22%230f172a%22/%3E%3Ctext x=%2250%22 y=%2264%22 font-size=%2254%22 text-anchor=%22middle%22 fill=%22%23facc15%22%3E古%3C/text%3E%3C/svg%3E', width: 24, height: 24 },
+    logo: { src: '/sgsj/favicon.svg', width: 24, height: 24 },
     nav: [
       { text: '首页', link: '/' },
       { text: '生活篇', link: '/life/' },
