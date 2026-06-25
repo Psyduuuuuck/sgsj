@@ -245,7 +245,7 @@ writeDoc('full.md', frontmatter('完整 Markdown 原文', '完整知识库整理
 sidebar.push({ text: '后记', link: '/afterword' })
 
 fs.writeFileSync(
-  path.join(vitepressDir, 'sidebar.generated.mts'),
+  path.join(vitepressDir, 'sidebar.generated.js'),
   `export const generatedSidebar = ${JSON.stringify(sidebar, null, 2)}\n`,
   'utf8'
 )
